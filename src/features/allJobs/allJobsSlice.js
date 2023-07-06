@@ -33,7 +33,6 @@ export const getAllJobs = createAsyncThunk(
         },
       });
 
-      console.log(resp.data);
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("There was an error");
@@ -57,9 +56,9 @@ const allJobsSlice = createSlice({
       state.isLoading = true;
     },
     [getAllJobs.fulfilled]: (state, { payload }) => {
+      console.log(payload);
       state.isLoading = false;
       state.jobs = payload.jobs;
-      console.log(payload);
     },
     [getAllJobs.rejected]: (state, { payload }) => {
       state.isLoading = false;
