@@ -42,10 +42,8 @@ const Register = () => {
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
   };
-  console.log(typeof user);
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       setTimeout(() => {
         navigate("/");
