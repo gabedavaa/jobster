@@ -6,6 +6,7 @@ import {
   removeUserFromLocalStorage,
 } from "../../utils/localStorage";
 import {
+  clearStoreThunk,
   loginUserThunk,
   registerUserThunk,
   updateUserThunk,
@@ -38,6 +39,8 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const clearStore = createAsyncThunk("user/clearStore", clearStoreThunk);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -55,49 +58,55 @@ const userSlice = createSlice({
       }
     },
   },
-  extraReducers: {
-    [registerUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [registerUser.fulfilled]: (state, { payload }) => {
-      const { user } = payload;
-      state.isLoading = false;
-      state.user = user;
-      addUserLocalStorage(user);
-      toast.success(`Hello  There ${user.name}`);
-    },
-    [registerUser.rejected]: (state, { payload }) => {
-      state.isLoading = false;
-      toast.error(payload);
-    },
-    [loginUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [loginUser.fulfilled]: (state, { payload }) => {
-      const { user } = payload;
-      state.isLoading = false;
-      state.user = user;
-      addUserLocalStorage(user);
-      toast.success(`Welcome Back ${user.name}`);
-    },
-    [loginUser.rejected]: (state, { payload }) => {
-      state.isLoading = false;
-      toast.error(payload);
-    },
-    [updateUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [updateUser.fulfilled]: (state, { payload }) => {
-      const { user } = payload;
-      state.isLoading = false;
-      state.user = user;
-      addUserLocalStorage(user);
-      toast.success(`User Updated!`);
-    },
-    [updateUser.rejected]: (state, { payload }) => {
-      state.isLoading = false;
-      toast.error(payload);
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        addUserLocalStorage(user);
+        toast.success(`Hello There ${user.name}`);
+      })
+      .addCase(registerUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        addUserLocalStorage(user);
+
+        toast.success(`Welcome Back ${user.name}`);
+      })
+      .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        addUserLocalStorage(user);
+
+        toast.success(`User Updated!`);
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(clearStore.rejected, () => {
+        toast.error("There was an error..");
+      });
   },
 });
 
