@@ -19,7 +19,6 @@ const SearchContainer = () => {
 
   const debounce = () => {
     let timeoutID;
-    console.log(timeoutID);
     return (e) => {
       setLocalSearch(e.target.value);
       clearTimeout(timeoutID);
